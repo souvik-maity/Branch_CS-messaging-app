@@ -30,16 +30,23 @@ app.get('/api/messages', (req, res) => {
   let query = 'SELECT * FROM messages';
   const params = [];
 
+  // If there is a search term, add a WHERE clause
   if (searchTerm) {
-    query += ' WHERE message_body LIKE ?';
+    // This SQL clause checks both the message_body AND the user_id
+    query += ' WHERE message_body LIKE ? OR user_id LIKE ?';
+    // We add the search term twice, once for each '?' placeholder
+    params.push(`%${searchTerm}%`);
     params.push(`%${searchTerm}%`);
   }
 
- // This new sorting logic puts resolved messages at the bottom.
-query += " ORDER BY CASE WHEN status = 'resolved' THEN 1 ELSE 0 END, urgent DESC, timestamp DESC";
+  // The sorting logic remains the same
+  query += " ORDER BY CASE WHEN status = 'resolved' THEN 1 ELSE 0 END, urgent DESC, timestamp DESC";
 
   connection.query(query, params, (err, results) => {
-    if (err) return res.status(500).send(err);
+    if (err) {
+      console.error('Search Query Error:', err);
+      return res.status(500).send(err);
+    }
     res.json(results);
   });
 });
