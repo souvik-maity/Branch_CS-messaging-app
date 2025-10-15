@@ -35,7 +35,8 @@ app.get('/api/messages', (req, res) => {
     params.push(`%${searchTerm}%`);
   }
 
-  query += ' ORDER BY urgent DESC, timestamp DESC';
+ // This new sorting logic puts resolved messages at the bottom.
+query += " ORDER BY CASE WHEN status = 'resolved' THEN 1 ELSE 0 END, urgent DESC, timestamp DESC";
 
   connection.query(query, params, (err, results) => {
     if (err) return res.status(500).send(err);
