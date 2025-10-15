@@ -1,4 +1,4 @@
-// client/src/components/MessageList.js
+
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -11,9 +11,8 @@ function MessageList() {
   const [messages, setMessages] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
-   changes.
   useEffect(() => {
-    
+   
     console.log(`Fetching messages with search term: "${searchTerm}"`);
 
     axios
@@ -29,8 +28,7 @@ function MessageList() {
   
   useEffect(() => {
     const handleUpdate = () => {
-      
-      axios
+        axios
         .get(`http://localhost:5000/api/messages?searchTerm=${searchTerm}`)
         .then((response) => setMessages(response.data))
         .catch((error) => console.error('Error refetching after update!', error));
@@ -39,7 +37,7 @@ function MessageList() {
     socket.on('newMessage', handleUpdate);
     socket.on('messageUpdated', handleUpdate);
 
-    
+   
     return () => {
       socket.off('newMessage', handleUpdate);
       socket.off('messageUpdated', handleUpdate);
