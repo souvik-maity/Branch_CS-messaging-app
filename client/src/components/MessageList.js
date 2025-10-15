@@ -11,26 +11,25 @@ function MessageList() {
   const [messages, setMessages] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // This useEffect hook is now dedicated to fetching messages.
-  // It runs ONCE on load, and then AGAIN every time the 'searchTerm' changes.
+   changes.
   useEffect(() => {
-    // SPY LOG #1: See the search term being used.
+    
     console.log(`Fetching messages with search term: "${searchTerm}"`);
 
     axios
       .get(`http://localhost:5000/api/messages?searchTerm=${searchTerm}`)
       .then((response) => {
-        // SPY LOG #2: See the filtered data received from the backend.
+        
         console.log('Received filtered data:', response.data);
         setMessages(response.data);
       })
       .catch((error) => console.error('Error fetching messages!', error));
-  }, [searchTerm]); // <-- This dependency is the crucial fix!
+  }, [searchTerm]); 
 
-  // This useEffect hook handles the real-time socket updates.
+  
   useEffect(() => {
     const handleUpdate = () => {
-      // When a real-time update occurs, refetch with the CURRENT search term.
+      
       axios
         .get(`http://localhost:5000/api/messages?searchTerm=${searchTerm}`)
         .then((response) => setMessages(response.data))
@@ -40,12 +39,12 @@ function MessageList() {
     socket.on('newMessage', handleUpdate);
     socket.on('messageUpdated', handleUpdate);
 
-    // Clean up the listeners when the component is no longer on screen.
+    
     return () => {
       socket.off('newMessage', handleUpdate);
       socket.off('messageUpdated', handleUpdate);
     };
-  }, [searchTerm]); // Also depends on searchTerm to refetch correctly.
+  }, [searchTerm]); 
 
   const getStatusClass = (status) => {
     if (status === 'assigned') return 'status-assigned';
