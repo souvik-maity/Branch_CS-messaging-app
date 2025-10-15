@@ -148,3 +148,7 @@ You need to have both the backend and frontend servers running simultaneously.
     npm start
     ```
     > The application will automatically open in your browser at `http://localhost:3000`.
+***
+
+Video >
+[![Watch Demo on Loom]](https://www.loom.com/share/3556cc16ec744fa186738eaefdb573ea)
